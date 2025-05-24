@@ -816,8 +816,12 @@
             <div class="process-grid">
                 <div class="process-card slide-in-left">
                     <div class="process-number">1</div>
-                    <h3>DNA Analysis</h3>
-                    <p>Submit your DNA sample for analysis in our state-of-the-art laboratory using the latest genomic sequencing technology.</p>
+                    <h3>Health Analysis</h3>
+                    <p>Submit your DNA sample for analysis. This software will analyze health risks you could be facing.</p>
+                    <a href="health/index.html" class="btn-primary">
+                        <span>Try Health Analysis</span>
+                        <span>→</span>
+                    </a>
                 </div>
                 
                 <div class="process-card fade-in">
@@ -1048,15 +1052,13 @@
         // Add loading states and micro-interactions
         document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
             button.addEventListener('click', function(e) {
+                // Only show loading for anchor links with href="#"
                 if (this.getAttribute('href') === '#') {
                     e.preventDefault();
-                    
                     // Add loading state
                     const originalText = this.innerHTML;
                     this.innerHTML = '<span>Loading...</span>';
                     this.style.pointerEvents = 'none';
-                    
-                    // Simulate loading
                     setTimeout(() => {
                         this.innerHTML = originalText;
                         this.style.pointerEvents = 'auto';

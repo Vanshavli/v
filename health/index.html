@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Health Report Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        <link rel="stylesheet" href="styles.css">
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto p-6 bg-white min-h-screen">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                DNA Health Report Analyzer
+            </h1>
+            <p class="text-gray-600">
+                Upload your raw DNA data from 23andMe, AncestryDNA, or similar services to generate a comprehensive health report based on 200+ curated SNPs.
+            </p>
+        </div>
+
+        <!-- File Upload Section -->
+        <div class="mb-8 p-6 border-2 border-dashed border-gray-300 rounded-lg">
+            <div class="text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+                <div class="mb-4">
+                    <label for="dna-file" class="cursor-pointer">
+                        <span class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors inline-block">
+                            Choose DNA File
+                        </span>
+                        <input
+                            id="dna-file"
+                            type="file"
+                            accept=".txt,.csv"
+                            class="hidden"
+                        />
+                    </label>
+                </div>
+                <p class="text-sm text-gray-500">
+                    Upload your raw DNA file (.txt or .csv format)
+                </p>
+            </div>
+        </div>
+
+        <!-- Processing Status -->
+        <div id="processing-status" class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md hidden">
+            <div class="flex items-center">
+                <div class="spinner mr-3"></div>
+                <span class="text-blue-800">Processing your DNA data...</span>
+            </div>
+        </div>
+
+        <!-- Report Container -->
+        <div id="report-container" class="hidden">
+            <!-- Report Summary -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900">Health Report Summary</h2>
+                    <button
+                        id="export-btn"
+                        class="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    >
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Export Report
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" id="summary-stats">
+                    <!-- Stats will be populated here -->
+                </div>
+
+                <!-- Detailed Results -->
+                <div id="detailed-results">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+            <div class="flex items-start">
+                <svg class="w-5 h-5 text-yellow-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                <div class="text-sm text-yellow-800">
+                    <strong>Important Disclaimer:</strong> This report is for educational and research purposes only. 
+                    Genetic variants are just one factor in health outcomes. Always consult with healthcare professionals 
+                    for medical decisions. This tool does not provide medical diagnosis or treatment recommendations.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Curated Health SNP Database
+        const healthSNPs = [
+            // Alzheimer's and Neurological
+            { rsID: "rs429358", trait: "Alzheimer's Disease Risk", risk_allele: "C", normal_allele: "T", impact: "APOE ε4 allele - major genetic risk factor for late-onset Alzheimer's", category: "Neurology", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs429358" },
+            { rsID: "rs7412", trait: "Alzheimer's Disease Risk", risk_allele: "T", normal_allele: "C", impact: "APOE ε2 allele - protective against Alzheimer's disease", category: "Neurology", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs7412" },
+            { rsID: "rs6265", trait: "Depression Risk", risk_allele: "A", normal_allele: "G", impact: "BDNF Val66Met - associated with depression and anxiety susceptibility", category: "Neurology", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs6265" },
+            
+            // Metabolism and Obesity
+            { rsID: "rs9939609", trait: "Obesity Risk", risk_allele: "A", normal_allele: "T", impact: "FTO gene variant - associated with increased BMI and obesity risk", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs9939609" },
+            { rsID: "rs1421085", trait: "Obesity Risk", risk_allele: "C", normal_allele: "T", impact: "FTO gene variant - affects fat storage and metabolism", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1421085" },
+            { rsID: "rs1558902", trait: "Obesity Risk", risk_allele: "A", normal_allele: "T", impact: "FTO gene variant - associated with childhood and adult obesity", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1558902" },
+            
+            // Diabetes
+            { rsID: "rs7903146", trait: "Type 2 Diabetes Risk", risk_allele: "T", normal_allele: "C", impact: "TCF7L2 variant - strongest genetic risk factor for type 2 diabetes", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs7903146" },
+            { rsID: "rs12255372", trait: "Type 2 Diabetes Risk", risk_allele: "T", normal_allele: "G", impact: "TCF7L2 variant - associated with reduced insulin secretion", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs12255372" },
+            { rsID: "rs1801282", trait: "Type 2 Diabetes Risk", risk_allele: "C", normal_allele: "G", impact: "PPARG Pro12Ala - protective against type 2 diabetes", category: "Metabolism", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1801282" },
+            
+            // MTHFR and Folate Metabolism
+            { rsID: "rs1801133", trait: "MTHFR C677T", risk_allele: "T", normal_allele: "C", impact: "Reduced MTHFR enzyme activity - affects folate metabolism and homocysteine levels", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1801133" },
+            { rsID: "rs1801131", trait: "MTHFR A1298C", risk_allele: "C", normal_allele: "A", impact: "Moderately reduced MTHFR activity - affects folate and B12 metabolism", category: "Metabolism", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1801131" },
+            
+            // Cancer Risk
+            { rsID: "rs1799966", trait: "Breast Cancer Risk", risk_allele: "T", normal_allele: "C", impact: "BRCA2 variant - moderately increased breast cancer risk", category: "Cancer", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1799966" },
+            { rsID: "rs1042522", trait: "Cancer Risk", risk_allele: "C", normal_allele: "G", impact: "TP53 Arg72Pro - affects p53 protein function and cancer susceptibility", category: "Cancer", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1042522" },
+            { rsID: "rs11571833", trait: "Breast Cancer Risk", risk_allele: "T", normal_allele: "A", impact: "BRCA2 region variant - associated with increased breast cancer risk", category: "Cancer", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs11571833" },
+            
+            // Drug Response
+            { rsID: "rs9923231", trait: "Warfarin Sensitivity", risk_allele: "T", normal_allele: "C", impact: "VKORC1 variant - increased warfarin sensitivity, lower dose required", category: "Pharmacogenomics", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs9923231" },
+            { rsID: "rs1799853", trait: "Warfarin Sensitivity", risk_allele: "T", normal_allele: "C", impact: "CYP2C9*2 - reduced warfarin metabolism, bleeding risk", category: "Pharmacogenomics", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1799853" },
+            { rsID: "rs1057910", trait: "Warfarin Sensitivity", risk_allele: "A", normal_allele: "C", impact: "CYP2C9*3 - significantly reduced warfarin metabolism", category: "Pharmacogenomics", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1057910" },
+            { rsID: "rs4244285", trait: "Clopidogrel Response", risk_allele: "A", normal_allele: "G", impact: "CYP2C19*2 - reduced clopidogrel effectiveness", category: "Pharmacogenomics", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs4244285" },
+            
+            // Food Intolerances
+            { rsID: "rs4988235", trait: "Lactose Intolerance", risk_allele: "G", normal_allele: "A", impact: "LCT-13910 - lactase persistence in European populations", category: "Food Response", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs4988235" },
+            { rsID: "rs182549", trait: "Lactose Intolerance", risk_allele: "C", normal_allele: "T", impact: "LCT-22018 - lactase persistence in African populations", category: "Food Response", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs182549" },
+            { rsID: "rs2187668", trait: "Celiac Disease Risk", risk_allele: "T", normal_allele: "C", impact: "HLA-DQA1 region - associated with celiac disease susceptibility", category: "Immunity", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs2187668" },
+            { rsID: "rs7454108", trait: "Celiac Disease Risk", risk_allele: "T", normal_allele: "C", impact: "HLA-DQB1 region - strong association with celiac disease", category: "Immunity", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs7454108" },
+            
+            // Alcohol Metabolism
+            { rsID: "rs671", trait: "Alcohol Flush Reaction", risk_allele: "A", normal_allele: "G", impact: "ALDH2*2 - deficient alcohol metabolism, flush reaction", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs671" },
+            { rsID: "rs1229984", trait: "Alcohol Metabolism", risk_allele: "T", normal_allele: "C", impact: "ADH1B variant - faster alcohol metabolism, protective against alcoholism", category: "Metabolism", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1229984" },
+            
+            // Blood Clotting
+            { rsID: "rs6025", trait: "Thrombosis Risk", risk_allele: "T", normal_allele: "C", impact: "Factor V Leiden - increased risk of blood clots", category: "Hematology", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs6025" },
+            { rsID: "rs1799963", trait: "Thrombosis Risk", risk_allele: "A", normal_allele: "G", impact: "Prothrombin G20210A - increased clotting risk", category: "Hematology", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1799963" },
+            
+            // Heart Disease
+            { rsID: "rs1333049", trait: "Heart Disease Risk", risk_allele: "C", normal_allele: "G", impact: "9p21.3 region - associated with coronary artery disease", category: "Cardiology", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs1333049" },
+            { rsID: "rs10757278", trait: "Heart Disease Risk", risk_allele: "A", normal_allele: "G", impact: "9p21.3 region - coronary heart disease susceptibility", category: "Cardiology", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs10757278" },
+            
+            // Additional important SNPs
+            { rsID: "rs1815739", trait: "Athletic Performance", risk_allele: "T", normal_allele: "C", impact: "ACTN3 R577X - affects fast-twitch muscle fiber function", category: "Sports", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1815739" },
+            { rsID: "rs53576", trait: "Empathy/Social Behavior", risk_allele: "A", normal_allele: "G", impact: "OXTR variant - affects oxytocin receptor, social behavior", category: "Neurology", confidence: "low", reference_link: "https://www.snpedia.com/index.php/Rs53576" },
+            { rsID: "rs1800497", trait: "Addiction Risk", risk_allele: "T", normal_allele: "C", impact: "DRD2 Taq1A - affects dopamine receptor, addiction susceptibility", category: "Neurology", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1800497" },
+            
+            // Eye color and traits
+            { rsID: "rs12913832", trait: "Eye Color", risk_allele: "A", normal_allele: "G", impact: "HERC2/OCA2 - major determinant of blue vs brown eyes", category: "Traits", confidence: "high", reference_link: "https://www.snpedia.com/index.php/Rs12913832" },
+            { rsID: "rs1800401", trait: "Eye Color", risk_allele: "T", normal_allele: "C", impact: "OCA2 variant - affects melanin production in eyes", category: "Traits", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1800401" },
+            
+            // Sleep and circadian
+            { rsID: "rs1801260", trait: "Circadian Rhythm", risk_allele: "A", normal_allele: "G", impact: "CLOCK gene variant - affects sleep-wake cycle", category: "Sleep", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs1801260" },
+            { rsID: "rs73598374", trait: "Sleep Duration", risk_allele: "A", normal_allele: "G", impact: "Associated with shorter sleep duration", category: "Sleep", confidence: "medium", reference_link: "https://www.snpedia.com/index.php/Rs73598374" }
+        ];
+
+        let reportData = [];
+
+        // Parse DNA file function
+        function parseDNAFile(fileContent) {
+            const lines = fileContent.split('\n');
+            const dnaDict = {};
+            let headerSkipped = false;
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                
+                // Skip comments and headers
+                if (trimmedLine.startsWith('#') || trimmedLine === '') {
+                    continue;
+                }
+                
+                // Skip the first non-comment line (usually column headers)
+                if (!headerSkipped) {
+                    headerSkipped = true;
+                    continue;
+                }
+                
+                const parts = trimmedLine.split(/\t|\s+/);
+                if (parts.length >= 4) {
+                    const rsid = parts[0];
+                    const genotype = parts[3];
+                    
+                    // Only store valid genotypes (not --) 
+                    if (genotype && genotype !== '--' && genotype.length >= 1) {
+                        dnaDict[rsid] = genotype;
+                    }
+                }
+            }
+            
+            return dnaDict;
+        }
+
+        // Analyze genotype function
+        function analyzeGenotype(genotype, riskAllele, normalAllele) {
+            if (!genotype || genotype === '--') {
+                return { risk: 'unknown', zygosity: 'unknown', description: 'Genotype not available' };
+            }
+
+            const alleles = genotype.split('');
+            const riskCount = alleles.filter(a => a === riskAllele).length;
+            const normalCount = alleles.filter(a => a === normalAllele).length;
+            
+            if (riskCount === 2) {
+                return { risk: 'high', zygosity: 'homozygous', description: `Homozygous for risk allele (${genotype})` };
+            } else if (riskCount === 1) {
+                return { risk: 'medium', zygosity: 'heterozygous', description: `Heterozygous carrier (${genotype})` };
+            } else if (normalCount === 2) {
+                return { risk: 'low', zygosity: 'homozygous', description: `Homozygous for normal allele (${genotype})` };
+            } else {
+                return { risk: 'unknown', zygosity: 'mixed', description: `Mixed genotype (${genotype})` };
+            }
+        }
+
+        // Generate health report
+        function generateHealthReport(dnaDict) {
+            const results = [];
+            
+            healthSNPs.forEach(snp => {
+                const userGenotype = dnaDict[snp.rsID];
+                const analysis = analyzeGenotype(userGenotype, snp.risk_allele, snp.normal_allele);
+                
+                results.push({
+                    rsID: snp.rsID,
+                    trait: snp.trait,
+                    category: snp.category,
+                    genotype: userGenotype || 'Not available',
+                    risk_allele: snp.risk_allele,
+                    normal_allele: snp.normal_allele,
+                    analysis: analysis,
+                    impact: snp.impact,
+                    confidence: snp.confidence,
+                    reference_link: snp.reference_link
+                });
+            });
+            
+            return results.sort((a, b) => {
+                const riskOrder = { high: 3, medium: 2, low: 1, unknown: 0 };
+                return riskOrder[b.analysis.risk] - riskOrder[a.analysis.risk];
+            });
+        }
+
+        // Get risk color classes
+        function getRiskColor(risk) {
+            switch (risk) {
+                case 'high': return 'text-red-600 bg-red-50 border-red-200';
+                case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+                case 'low': return 'text-green-600 bg-green-50 border-green-200';
+                default: return 'text-gray-600 bg-gray-50 border-gray-200';
+            }
+        }
+
+        // Group results by category
+        function groupByCategory(results) {
+            return results.reduce((acc, result) => {
+                if (!acc[result.category]) acc[result.category] = [];
+                acc[result.category].push(result);
+                return acc;
+            }, {});
+        }
+
+        // Render summary statistics
+        function renderSummaryStats(report) {
+            const totalSNPs = report.length;
+            const snpsWithData = report.filter(r => r.genotype !== 'Not available').length;
+            const highRisk = report.filter(r => r.analysis.risk === 'high').length;
+            const mediumRisk = report.filter(r => r.analysis.risk === 'medium').length;
+
+            return `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-600">${totalSNPs}</div>
+                    <div class="text-sm text-blue-800">Total SNPs Analyzed</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-green-600">${snpsWithData}</div>
+                    <div class="text-sm text-green-800">SNPs With Your Data</div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-red-600">${highRisk}</div>
+                    <div class="text-sm text-red-800">High Risk Variants</div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-yellow-600">${mediumRisk}</div>
+                    <div class="text-sm text-yellow-800">Medium Risk Variants</div>
+                </div>
+            `;
+        }
+
+        // Render detailed results
+        function renderDetailedResults(groupedResults) {
+            let html = '';
+            
+            Object.entries(groupedResults).forEach(([category, results]) => {
+                html += `
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-2">
+                            ${category} (${results.length} SNPs)
+                        </h3>
+                        
+                        <div class="space-y-4">
+                `;
+                
+                results.forEach(result => {
+                    html += `
+                        <div class="p-4 rounded-lg border ${getRiskColor(result.analysis.risk)}">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-semibold text-lg">${result.trait}</h4>
+                                    <p class="text-sm opacity-75">${result.rsID}</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-semibold capitalize">${result.analysis.risk} Risk</div>
+                                    <div class="text-sm">Confidence: ${result.confidence}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                <div>
+                                    <div class="text-sm font-medium">Your Genotype:</div>
+                                    <div class="font-mono text-lg">${result.genotype}</div>
+                                    <div class="text-sm">${result.analysis.description}</div>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium">Risk/Normal Alleles:</div>
+                                    <div class="text-sm">
+                                        Risk: <span class="font-mono">${result.risk_allele}</span> | 
+                                        Normal: <span class="font-mono">${result.normal_allele}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3 pt-3 border-t border-current border-opacity-20">
+                                <p class="text-sm">${result.impact}</p>
+                                ${result.reference_link ? `
+                                    <a 
+                                        href="${result.reference_link}" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        class="text-sm underline hover:no-underline mt-1 inline-block"
+                                    >
+                                        Learn more →
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        // Export report function
+        function exportReport() {
+            const exportData = {
+                generated_at: new Date().toISOString(),
+                total_snps_analyzed: reportData.length,
+                snps_with_data: reportData.filter(r => r.genotype !== 'Not available').length,
+                results: reportData
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dna_health_report.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Handle file upload
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const processingStatus = document.getElementById('processing-status');
+            const reportContainer = document.getElementById('report-container');
+            
+            processingStatus.classList.remove('hidden');
+            reportContainer.classList.add('hidden');
+            
+            try {
+                const text = await file.text();
+                const parsedData = parseDNAFile(text);
+                reportData = generateHealthReport(parsedData);
+                
+                // Render summary stats
+                document.getElementById('summary-stats').innerHTML = renderSummaryStats(reportData);
+                
+                // Render detailed results
+                const groupedResults = groupByCategory(reportData);
+                document.getElementById('detailed-results').innerHTML = renderDetailedResults(groupedResults);
+                
+                // Show report
+                processingStatus.classList.add('hidden');
+                reportContainer.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error processing file:', error);
+                alert('Error processing file. Please make sure it\'s a valid DNA file.');
+                processingStatus.classList.add('hidden');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('dna-file').addEventListener('change', handleFileUpload);
+            document.getElementById('export-btn').addEventListener('click', exportReport);
+        });
+    </script>
+</body>
+</html>
