@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanshavli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary-900: #0f1419;
@@ -16,22 +18,22 @@
             --primary-300: #a0aec0;
             --primary-200: #e2e8f0;
             --primary-100: #f7fafc;
-            
+
             --accent-blue: #3b82f6;
             --accent-purple: #8b5cf6;
             --accent-cyan: #06b6d4;
             --accent-pink: #ec4899;
-            
+
             --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-tertiary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            
+
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            
+
             --blur-sm: blur(4px);
             --blur-md: blur(8px);
             --blur-lg: blur(16px);
@@ -74,7 +76,7 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            background: 
+            background:
                 radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
@@ -116,6 +118,7 @@
                 opacity: 0;
                 transform: translateY(60px) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -193,7 +196,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -263,9 +266,19 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(120deg); }
-            66% { transform: translateY(20px) rotate(240deg); }
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+            }
+
+            66% {
+                transform: translateY(20px) rotate(240deg);
+            }
         }
 
         /* Section Styles */
@@ -434,7 +447,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
         }
 
         .origin-content {
@@ -537,7 +550,7 @@
 
         /* Final CTA */
         .final-cta {
-            background: 
+            background:
                 radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 70%),
                 linear-gradient(135deg, rgba(15, 20, 25, 0.95) 0%, rgba(26, 31, 46, 0.95) 100%);
             backdrop-filter: var(--blur-lg);
@@ -655,11 +668,11 @@
             .container {
                 padding: 0 1.5rem;
             }
-            
+
             .section {
                 padding: 6rem 0;
             }
-            
+
             .process-grid,
             .origins-grid,
             .about-grid {
@@ -672,17 +685,17 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            
+
             .btn-primary,
             .btn-secondary {
                 justify-content: center;
             }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 2rem;
             }
-            
+
             .process-card,
             .about-card,
             .origin-content {
@@ -694,7 +707,7 @@
             .container {
                 padding: 0 1rem;
             }
-            
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -743,6 +756,7 @@
         }
     </style>
 </head>
+
 <body>
     <button id="theme-toggle" style="
         position: fixed;
@@ -768,37 +782,40 @@
     <section class="hero">
         <div class="dna-container">
             <svg class="dna-strand" width="200" height="200" viewBox="0 0 200 200">
-                <path d="M50 20 Q100 40 150 20 Q100 60 50 80 Q100 100 150 80 Q100 140 50 160 Q100 180 150 160" 
-                      stroke="rgba(59, 130, 246, 0.3)" stroke-width="2" fill="none"/>
-                <path d="M50 40 Q100 20 150 40 Q100 80 50 100 Q100 120 150 100 Q100 160 50 180 Q100 200 150 180" 
-                      stroke="rgba(139, 92, 246, 0.3)" stroke-width="2" fill="none"/>
+                <path d="M50 20 Q100 40 150 20 Q100 60 50 80 Q100 100 150 80 Q100 140 50 160 Q100 180 150 160"
+                    stroke="rgba(59, 130, 246, 0.3)" stroke-width="2" fill="none" />
+                <path d="M50 40 Q100 20 150 40 Q100 80 50 100 Q100 120 150 100 Q100 160 50 180 Q100 200 150 180"
+                    stroke="rgba(139, 92, 246, 0.3)" stroke-width="2" fill="none" />
             </svg>
             <svg class="dna-strand" width="150" height="150" viewBox="0 0 150 150">
-                <path d="M30 15 Q75 30 120 15 Q75 45 30 60 Q75 75 120 60 Q75 105 30 120 Q75 135 120 120" 
-                      stroke="rgba(6, 182, 212, 0.2)" stroke-width="1.5" fill="none"/>
+                <path d="M30 15 Q75 30 120 15 Q75 45 30 60 Q75 75 120 60 Q75 105 30 120 Q75 135 120 120"
+                    stroke="rgba(6, 182, 212, 0.2)" stroke-width="1.5" fill="none" />
             </svg>
             <svg class="dna-strand" width="180" height="180" viewBox="0 0 180 180">
-                <path d="M40 18 Q90 36 140 18 Q90 54 40 72 Q90 90 140 72 Q90 126 40 144 Q90 162 140 144" 
-                      stroke="rgba(236, 72, 153, 0.2)" stroke-width="1.5" fill="none"/>
+                <path d="M40 18 Q90 36 140 18 Q90 54 40 72 Q90 90 140 72 Q90 126 40 144 Q90 162 140 144"
+                    stroke="rgba(236, 72, 153, 0.2)" stroke-width="1.5" fill="none" />
             </svg>
         </div>
-        
+
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
-                    <span>Vanshavli </span> 
+                    <span>Vanshavli </span>
                 </div>
                 <h1>Uncover Your Ancestry's Story</h1>
-                <p class="hero-subtitle">Trace your roots through time and across continents with our cutting-edge DNA analysis. Discover the unique journey of your ancestors and the rich tapestry of your heritage.</p>
+                <p class="hero-subtitle">Trace your roots through time and across continents with our cutting-edge DNA
+                    analysis. Discover the unique journey of your ancestors and the rich tapestry of your heritage.</p>
                 <div class="hero-cta">
                     <a href="codebase/index.html" class="btn-primary">
                         <span>Start Your Journey</span>
                         <span>→</span>
                     </a>
-                    <a href="#" class="btn-secondary">
+                    <a href="video/demovideo.mp4" class="btn-secondary" target="_blank">
                         <span>📹</span>
                         <span>Watch Demo</span>
                     </a>
+
+
                 </div>
             </div>
         </div>
@@ -810,30 +827,34 @@
             <div class="section-header fade-in">
                 <div class="section-badge">How It Works</div>
                 <h2 class="section-title">Your Journey Through Time</h2>
-                <p class="section-description">Our process is simple and secure, providing you with a comprehensive view of your genetic heritage through advanced scientific analysis.</p>
+                <p class="section-description">Our process is simple and secure, providing you with a comprehensive view
+                    of your genetic heritage through advanced scientific analysis.</p>
             </div>
-            
+
             <div class="process-grid">
                 <div class="process-card slide-in-left">
                     <div class="process-number">1</div>
                     <h3>Health Analysis</h3>
-                    <p>Submit your DNA sample for analysis. This software will analyze health risks you could be facing.</p>
+                    <p>Submit your DNA sample for analysis. This software will analyze health risks you could be facing.
+                    </p>
                     <a href="health/index.html" class="btn-primary">
                         <span>Try Health Analysis</span>
                         <span>→</span>
                     </a>
                 </div>
-                
+
                 <div class="process-card fade-in">
                     <div class="process-number">2</div>
                     <h3>Genetic Mapping</h3>
-                    <p>Our advanced algorithms map your DNA to historical populations across the globe, revealing your ancestral origins.</p>
+                    <p>Our advanced algorithms map your DNA to historical populations across the globe, revealing your
+                        ancestral origins.</p>
                 </div>
-                
+
                 <div class="process-card slide-in-right">
                     <div class="process-number">3</div>
                     <h3>Ancestry Report</h3>
-                    <p>Receive a detailed, personalized report of your ancestry, complete with interactive maps and historical context.</p>
+                    <p>Receive a detailed, personalized report of your ancestry, complete with interactive maps and
+                        historical context.</p>
                 </div>
             </div>
         </div>
@@ -869,9 +890,10 @@
             <div class="section-header fade-in">
                 <div class="section-badge">Deep Ancestry Origins</div>
                 <h2 class="section-title">Explore Your Genetic Heritage</h2>
-                <p class="section-description">Discover the fascinating story of your ancestors through comprehensive genetic analysis and historical research.</p>
+                <p class="section-description">Discover the fascinating story of your ancestors through comprehensive
+                    genetic analysis and historical research.</p>
             </div>
-            
+
             <div class="origins-grid">
                 <div class="origin-card slide-in-left">
                     <div class="origin-visual">
@@ -880,10 +902,11 @@
                     </div>
                     <div class="origin-content">
                         <h3>Ancient Migrations</h3>
-                        <p>Explore the migration patterns of your ancestors across millennia, tracing their journeys through changing landscapes and civilizations.</p>
+                        <p>Explore the migration patterns of your ancestors across millennia, tracing their journeys
+                            through changing landscapes and civilizations.</p>
                     </div>
                 </div>
-                
+
                 <div class="origin-card fade-in">
                     <div class="origin-visual">
                         <img src="images/m2.png" alt="Ancient Migrations" class="origin-image">
@@ -891,10 +914,11 @@
                     </div>
                     <div class="origin-content">
                         <h3>Genetic Diversity</h3>
-                        <p>Understand the genetic diversity within your ancestry and discover the unique combinations that make up your heritage.</p>
+                        <p>Understand the genetic diversity within your ancestry and discover the unique combinations
+                            that make up your heritage.</p>
                     </div>
                 </div>
-                
+
                 <div class="origin-card slide-in-right">
                     <div class="origin-visual">
                         <img src="images/m3.png" alt="Ancient Migrations" class="origin-image">
@@ -902,7 +926,8 @@
                     </div>
                     <div class="origin-content">
                         <h3>Historical Context</h3>
-                        <p>Gain insights into the historical events and cultural movements that shaped your ancestors' lives and influenced your lineage.</p>
+                        <p>Gain insights into the historical events and cultural movements that shaped your ancestors'
+                            lives and influenced your lineage.</p>
                     </div>
                 </div>
             </div>
@@ -915,20 +940,23 @@
             <div class="section-header fade-in">
                 <div class="section-badge">About & Documentation</div>
                 <h2 class="section-title">Science You Can Trust</h2>
-                <p class="section-description">Built on cutting-edge research and validated methodologies, our platform delivers accurate, meaningful insights into your genetic heritage.</p>
+                <p class="section-description">Built on cutting-edge research and validated methodologies, our platform
+                    delivers accurate, meaningful insights into your genetic heritage.</p>
             </div>
-            
+
             <div class="about-grid">
                 <div class="about-card slide-in-left">
                     <div class="about-icon">👥</div>
                     <h3>Expert Team</h3>
-                    <p>Our team of geneticists, historians, and data scientists work together to provide you with the most accurate and comprehensive ancestry analysis available.</p>
+                    <p>Our team of geneticists, historians, and data scientists work together to provide you with the
+                        most accurate and comprehensive ancestry analysis available.</p>
                 </div>
-                
+
                 <div class="about-card slide-in-right">
                     <div class="about-icon">📋</div>
                     <h3>Scientific Method</h3>
-                    <p>Access detailed documentation on our methodology, peer-reviewed research, and the advanced techniques we use to analyze your genetic data.</p>
+                    <p>Access detailed documentation on our methodology, peer-reviewed research, and the advanced
+                        techniques we use to analyze your genetic data.</p>
                 </div>
             </div>
         </div>
@@ -939,7 +967,8 @@
         <div class="container">
             <div class="cta-content fade-in">
                 <h2 class="cta-title">Ready to Uncover Your Past?</h2>
-                <p class="cta-description">Begin your exploration of your ancestry today and discover the extraordinary story waiting within your DNA. Join millions who have already uncovered their heritage.</p>
+                <p class="cta-description">Begin your exploration of your ancestry today and discover the extraordinary
+                    story waiting within your DNA. Join millions who have already uncovered their heritage.</p>
                 <a href="codebase/index.html" class="btn-primary">
 
                     <span>Start Your Journey</span>
@@ -962,7 +991,7 @@
                         <a href="#">Health Insights</a>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Company</h4>
                     <div class="footer-links">
@@ -972,7 +1001,7 @@
                         <a href="#">Press</a>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Support</h4>
                     <div class="footer-links">
@@ -982,7 +1011,7 @@
                         <a href="#">Terms of Service</a>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h4>Connect</h4>
                     <div class="footer-links">
@@ -993,7 +1022,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>©2025 Vanshavli. All rights reserved. • Built with cutting-edge genetic science</p>
             </div>
@@ -1028,7 +1057,7 @@
             const scrolled = window.pageYOffset;
             const rate = scrolled * -0.5;
             const parallaxElements = document.querySelectorAll('.dna-strand');
-            
+
             parallaxElements.forEach((element, index) => {
                 const speed = (index + 1) * 0.3;
                 element.style.transform = `translateY(${rate * speed}px) rotate(${scrolled * 0.1}deg)`;
@@ -1051,7 +1080,7 @@
 
         // Add loading states and micro-interactions
         document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 // Only show loading for anchor links with href="#"
                 if (this.getAttribute('href') === '#') {
                     e.preventDefault();
@@ -1074,16 +1103,16 @@
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
+
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                
+
                 const rotateX = (y - centerY) / 10;
                 const rotateY = (centerX - x) / 10;
-                
+
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.transform = '';
             });
@@ -1097,7 +1126,7 @@
                 const isPercentage = target.includes('%');
                 const isPlus = target.includes('+');
                 const numericValue = parseInt(target.replace(/[^\d]/g, ''));
-                
+
                 let current = 0;
                 const increment = numericValue / 50;
                 const timer = setInterval(() => {
@@ -1106,14 +1135,14 @@
                         current = numericValue;
                         clearInterval(timer);
                     }
-                    
+
                     let displayValue = Math.floor(current);
                     if (numericValue >= 1000000) {
                         displayValue = (displayValue / 1000000).toFixed(1) + 'M';
                     } else if (numericValue >= 1000) {
                         displayValue = (displayValue / 1000).toFixed(0) + 'K';
                     }
-                    
+
                     stat.textContent = displayValue + (isPercentage ? '%' : '') + (isPlus ? '+' : '');
                 }, 50);
             });
@@ -1147,7 +1176,7 @@
             const imageUrls = [
                 // Add any critical images here
             ];
-            
+
             imageUrls.forEach(url => {
                 const img = new Image();
                 img.src = url;
@@ -1157,7 +1186,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             preloadImages();
-            
+
             // Add loaded class for CSS transitions
             setTimeout(() => {
                 document.body.classList.add('loaded');
@@ -1182,4 +1211,5 @@
         });
     </script>
 </body>
+
 </html>
